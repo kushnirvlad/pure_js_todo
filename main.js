@@ -85,8 +85,8 @@ function renderList() {
         todo.appendChild(name_input)
         todo.appendChild(description_input)
 
-        todo.appendChild(remove_btn)
         todo.appendChild(edit_btn)
+        todo.appendChild(remove_btn)
 
         todoContainer.appendChild(todo)
 
