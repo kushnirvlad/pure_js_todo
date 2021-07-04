@@ -140,6 +140,8 @@ function editTodo(t, e) {
         })
         renderList()
     } else {
+        editButton.textContent = "Save"
+
         label.style.display = "none"
         inputs.forEach((input)=>{
             input.style.display = "inline-flex"
