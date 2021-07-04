@@ -2,7 +2,7 @@ const name_input = document.querySelector(".name")
 const description_input = document.querySelector(".description")
 const add_btn = document.querySelector(".button_add")
 
-const list = document.querySelector(".todo_container")
+const list = document.querySelector(".todo_wrapper")
 
 let todos = []
 
@@ -34,10 +34,16 @@ function renderList() {
 
     todos.map(t => {
         let todoContainer = document.createElement('div')
+        todoContainer.classList.add('todo_container')
         let todo = document.createElement('li')
+
+
+        let buttons_container = document.createElement('div')
+        buttons_container.classList.add("buttons_container")
 
         const remove_btn = document.createElement('div')
         remove_btn.innerText = "Remove"
+        remove_btn.classList.add('button')
         remove_btn.classList.add('button_remove')
         remove_btn.addEventListener('click', e => {
             removeTodo(t)
@@ -45,29 +51,54 @@ function renderList() {
 
         const edit_btn = document.createElement('div')
         edit_btn.innerText = "Edit"
+        edit_btn.classList.add('button')
         edit_btn.classList.add('button_edit')
         edit_btn.addEventListener('click', e => {
-            editTodo(t)
+            editTodo(t, e)
         })
+
 
         todo.classList.add('todo')
-        todo.innerText = `${t.name}: ${t.description}`;
-        if (t.done === true) {
-            todo.style.textDecoration = "line-through"
-        } else todo.style.textDecoration = "none"
+        let label = document.createElement('label');
+        label.innerText = `${t.name}: ${t.description}`;
 
-        todo.addEventListener('click', e => {
+        todo.appendChild(label)
+        todo.setAttribute('data-key', `${t.id}`);
+        if (t.done === true) {
+            label.style.textDecoration = "line-through"
+        } else label.style.textDecoration = "none"
+
+        label.addEventListener('click', e => {
             resolveTodo(t)
         })
+
+        let name_input = document.createElement('input')
+        name_input.setAttribute('type', 'text');
+        name_input.style.display = 'none'
+        name_input.classList.add('editInput')
+
+        let description_input = document.createElement('input')
+        description_input.setAttribute('type', 'text');
+        description_input.style.display = 'none'
+        description_input.classList.add('editInput')
+
+        todo.appendChild(name_input)
+        todo.appendChild(description_input)
+
+        todo.appendChild(remove_btn)
+        todo.appendChild(edit_btn)
+
         todoContainer.appendChild(todo)
-        todoContainer.appendChild(remove_btn)
-        todoContainer.appendChild(edit_btn)
+
+
         list.appendChild(todoContainer)
     })
 }
 
 function resolveTodo(todo) {
+
     todos.map(t => {
+
         if (t.id === todo.id) {
             t.done = !t.done
         }
@@ -81,8 +112,41 @@ function removeTodo(todo) {
 
     renderList()
 }
-function editTodo(todo) {
+
+function editTodo(t, e) {
+    let editButton = e.target;
 
 
-    renderList()
+    let todo = editButton.parentNode;
+
+    let label = todo.querySelector('label');
+    let inputs = todo.querySelectorAll('input[type=text]');
+
+    let labelText = label.textContent.split(":")
+
+    let name = labelText[0];
+    let description = labelText[1].replace(/\s/g, "");
+
+    let containsClass = todo.classList.contains('editMode');
+
+    if (containsClass) {
+        label.style.display = "flex"
+        todos.map(td => {
+            console.log(td.name, td.description)
+            if (td.id === t.id) {
+                td.name = inputs[0].value
+                td.description = inputs[1].value
+            }
+        })
+        renderList()
+    } else {
+        label.style.display = "none"
+        inputs.forEach((input)=>{
+            input.style.display = "inline-flex"
+        })
+        inputs[0].value = name;
+        inputs[1].value = description
+    }
+
+    todo.classList.toggle('editMode');
 }

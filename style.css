@@ -15,6 +15,9 @@ h1 {
     color: #fff;
     font-size: 30px;
 }
+label{
+    display: inline-block; width: 640px;
+}
 
 .form_container {
     display: flex;
@@ -22,19 +25,34 @@ h1 {
     align-items: center;
     justify-content: space-between;
 }
+.todo_wrapper{
+    background-color: white;
+}
 .todo_container {
     display: flex;
+    flex-direction: row;
     align-self: center;
-    flex-direction: column;
     align-items: flex-start;
     justify-content: space-between;
 }
 
+.todo {
+    align-self: center;
+    justify-content: space-between;
+    align-content: space-between;
+    font-size: 25px
+}
+.todo .editMode label {
+    display: none;
+}
 
 input[type=text] {
     width: 400px;
     padding: 7px;
     margin-bottom: 5px;
+}
+.editInput{
+    max-width: 300px;
 }
 
 
@@ -48,7 +66,7 @@ input[type=text] {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
+    margin: 10px 10px;
     transition-duration: 0.4s;
     cursor: pointer;
 }
